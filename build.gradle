@@ -1,0 +1,210 @@
+/**
+ * gradle-versions-plugin Documentation: https://github.com/ben-manes/gradle-versions-plugin
+ * gradle-upgrade-interactive Documentation: https://github.com/kevcodez/gradle-upgrade-interactive
+ */
+plugins {
+    id "com.jfrog.artifactory" version "4.15.1"
+    id 'war'
+    id 'eclipse'
+    id 'idea'
+    id 'groovy'
+    id "org.sonarqube" version "2.8"
+    id "jacoco"
+    id 'application'
+    id 'com.github.ben-manes.versions' version "0.28.0"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id 'org.jenkins-ci.jpi' version '0.38.0'
+}
+
+// Pull in version information from version.properties
+Properties props = new Properties()
+props.load(new FileInputStream("$project.rootDir/gradle/version.properties"))
+props.each { prop -> if (!project.hasProperty(prop.key)) project.ext.set(prop.key, prop.value) }
+
+// The pipeline can override these values by e.g. `gradle build -Prevision_version=3`
+version = new Version(major: project.property('version.major'),
+        minor: project.property('version.minor'),
+        revision: project.property('version.revision'))
+
+defaultTasks 'clean', 'compileTestGroovy'
+
+project.group = 'com.optum.riptide.jenkins.pipeline.library'
+project.version = '1.0.0-SNAPSHOT'
+
+mainClassName = 'com.optum.jenkins.pipeline.library.cli.Application'
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    resolve {
+        repository {
+            repoKey = 'repo'
+            maven = true
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+shadowJar {
+    zip64 true
+}
+
+sonarqube {
+    properties {
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.jacoco.reportPaths", "$buildDir/target/jacoco.exec"
+        property "sonar.vorbose", "true"
+        property 'sonar.coverage.exclusions', "src/com/optum/jenkins/pipeline/library/servicenow/ChangeRequest.groovy"
+    }
+}
+
+configurations {
+    bom
+    upToDate
+    exceedLatest
+    platform
+    upgradesFound
+    upgradesFound2
+    unresolvable
+    unresolvable2
+}
+
+repositories {
+    maven {
+        url "https://repo1.uhc.com/artifactory"
+    }
+    maven {
+        url "https://repo.jenkins-ci.org/public/"
+    }
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compileGroovy {
+        groovyOptions.configurationScript = file("gradle/config.groovy")
+    }
+//    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/global-pipeline-library-method-classes-0.3.0.jar')
+    implementation group: 'com.cloudbees', name: 'groovy-cps', version: '1.32'
+    implementation group: 'com.contrastsecurity', name: 'contrast-sdk-java', version: '2.12'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
+    implementation group: 'com.github.ben-manes', name: 'gradle-versions-plugin', version: '0.+'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    implementation group: 'com.lesfurets', name: 'jenkins-pipeline-unit', version: '1.3'
+    implementation group: 'com.optum.jenkins.plugins', name: 'optum-plugin', version: '1.3.1'
+    implementation group: 'com.optum.psas', name: 'securitymetrics-client', version: '0.1.16'
+    implementation group: 'com.optum.riptide.http', name: 'rest-clients', version: '1.1.0'
+    implementation group: 'com.rallydev.rest', name: 'rally-rest-api', version: '2.2.1'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.4.0'
+    implementation group: 'io.fabric8', name: 'openshift-client', version: '4.8.0'
+    implementation group: 'javax.inject', name: 'javax.inject', version: '1'
+    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    implementation group: 'maven-plugins', name: 'maven-cobertura-plugin', version: '1.4'
+    implementation group: 'org.apache.ivy', name: 'ivy', version: '2.5.0'
+    implementation group: 'org.apache.maven', name: 'maven-model', version: '3.6.3'
+    implementation group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.1'
+    testImplementation group: 'org.codehaus.groovy', name: 'groovy-test', version: '3.0.1'
+    implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.1'
+    implementation group: 'org.codehaus.groovy', name: 'groovy-jaxb', version: '3.0.1'
+    implementation group: 'org.eclipse.hudson', name: 'hudson-cli', version: '3.1.2'
+    implementation group: 'org.eclipse.hudson', name: 'hudson-core', version: '3.1.2'
+    implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.29'
+    implementation group: 'org.jenkins-ci.main', name: 'jenkins-core', version: '2.223', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins', name: 'buildrotator', version: '1.2', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins', name: 'cloudbees-folder', version: '5.3', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins', name: 'credentials', version: '2.1.16', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins', name: 'credentials-binding', version: '1.4', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins', name: 'junit', version: '1.6', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins', name: 'mask-passwords', version: '2.7', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins', name: 'plain-credentials', version: '1.5', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins.workflow', name: 'workflow-api', version: '2.23.1', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins.workflow', name: 'workflow-cps', version: '2.41', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins.workflow', name: 'workflow-cps-global-lib', version: '2.9', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins.workflow', name: 'workflow-job', version: '2.15', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins.workflow', name: 'workflow-multibranch', version: '2.21', ext: 'jar'
+    implementation group: 'org.jenkins-ci.plugins.workflow', name: 'workflow-step-api', version: '2.13', ext: 'jar'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    implementation group: 'org.kohsuke', name: 'github-api', version: '1.108'
+    implementation group: 'org.kohsuke.stapler', name: 'stapler', version: '1.259'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    implementation group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '2.8.0.1969'
+    implementation group: 'org.springframework', name: 'spring-web', version: '5.2.2.RELEASE'
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.26'
+    testImplementation group: 'junit', name: 'junit', version: '4.13'
+    testImplementation group: 'cglib', name: 'cglib-nodep', version: '3.3.0'
+    testImplementation group: 'com.lesfurets', name: 'jenkins-pipeline-unit', version: '1.1'
+    testImplementation group: 'commons-io', name: 'commons-io', version: '2.6.0.redhat-00001'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.0'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.6.0'
+    testImplementation group: 'org.objenesis', name: 'objenesis', version: '3.1'
+    testImplementation group: 'org.spockframework', name: 'spock-core', version: '2.0-M2-groovy-3.0'
+    testImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.26'  //read test optumfile yaml
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.0'
+}
+
+configurations {
+    integrationCompile.extendsFrom testCompile
+    integrationRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src', 'vars']
+        }
+        resources {
+            srcDirs = ['resources']
+        }
+    }
+    test {
+        groovy.srcDirs = ['test/groovy']
+        resources.srcDirs = ['test/resources']
+    }
+//    integration {
+//        // Note:  https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
+//        groovy {
+//            compileClasspath += main.output + test.output
+//            runtimeClasspath += main.output + test.output
+//            srcDir file('test/integration/groovy')
+//        }
+//        resources.srcDir file('src/integration/resources')
+//    }
+}
+
+
+test {
+    dependsOn 'cleanTest'
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+    useJUnitPlatform()
+}
+
+//task integration(type: Test) {
+//    // dependsOn 'cleanTest'
+//    testClassesDirs = sourceSets.integration.output.classesDirs
+//    classpath = sourceSets.integration.runtimeClasspath
+//    outputs.upToDateWhen { false }
+//
+//    testLogging {
+//        events "PASSED", "FAILED", "SKIPPED"
+//    }
+//}
+
+// After the build, delete the "vars" classes which are output to build/classes/main.
+task deleteVarsClasses(type: Delete) {
+    delete fileTree(dir: "$buildDir/classes/main", include: '*.class')
+}
+
+class Version {
+    String major, minor, revision
+
+    String toString() {
+        "$major.$minor.$revision"
+    }
+}
