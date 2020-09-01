@@ -1,0 +1,7 @@
+#!/bin/bash
+#########################################
+# Jenkins CLI
+alias jenkinsUrlLegacy='export JENKINS_URL=https://jenkins.optum.com/riptide/ && echo "JENKINS_URL=$JENKINS_URL"'
+alias jenkinsUrlNew='export JENKINS_URL=https://riptide-jenkins-legacy.optum.com/ && echo "JENKINS_URL=$JENKINS_URL"'
+alias jenkinsUrlCloud='export JENKINS_URL=https://riptide-jenkins-cloud.optum.com/ && echo "JENKINS_URL=$JENKINS_URL"'
+jenkinsUrlNew
