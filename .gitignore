@@ -1,23 +1,48 @@
-# Compiled class file
-*.class
 
-# Log file
+############################################
+#Generic File and Folder ignors:
+*.bak
+RemoteSystemsTempFiles/*
+.DS_Store
+workspace/
+workingDir/
+data/
+logs/
 *.log
+*.log*
+.git/
+.vscode/
 
-# BlueJ files
-*.ctxt
+############################################
+# Build Locations:
+build/
+target/
+bin/
+node/
+node_modules/
+app-bundle.js
+fortify_results/
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+############################################
+# Eclipse Files:
+.tern-project
+.settings/
+Servers/*
+.metadata/*
+.recommenders/*
+.classpath
+.project
+mvnw
+mvnw.cmd
+.mvn/
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+############################################
+# IntelliJ Files
+*.eml
+*.iml
+.idea/
+.factorypath
+
+
+############################################
