@@ -1,3 +1,5 @@
 #!/bin/bash
 #########################################
 # Jenkins CLI
+alias jcli="java     -Djavax.net.ssl.trustStore=/Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkinsKeyStore     -Djavax.net.ssl.trustStorePassword=changeme     -jar /Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkins-cli.jar     -webSocket -s $JENKINS_URL"
+alias riptideJenkinsDevops='export JENKINS_URL=https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/ JENKINS_USER_ID=jsticha JENKINS_API_TOKEN=   && echo "JENKINS_URL=https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/ JENKINS_USER_ID="'
