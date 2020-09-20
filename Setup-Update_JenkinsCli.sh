@@ -24,6 +24,8 @@ read -p "Please enter the alias name for switching to $JENKINS_URL. (ex. riptide
 JENKINS_ALIAS=${JENKINS_ALIAS:-riptideJenkinsDevops}
 read -p "Please enter your MSID: " SCRIPT_MSID
 SCRIPT_MSID=${SCRIPT_MSID}
+read -p "Please enter your Jenkins API Token (Generate one here $JENKINS_URL/user/$SCRIPT_MSID/configure): " SCRIPT_API_TOKEN
+SCRIPT_API_TOKEN=${SCRIPT_API_TOKEN}
 
 if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   # Update Certificates
@@ -83,33 +85,44 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
     curl ${JENKINS_URL}/jnlpJars/jenkins-cli.jar --output jenkins-cli.jar
   fi
 
-  SCRIPT_API_TOKEN=$(curl -u$SCRIPT_MSID "$JENKINS_URL/me/configure" | hxselect '#apiToken' | sed 's/.*value="\([^"]*\)".*/\1\n/g')
-
-  echo '' >>dotfiles/.jenkins-cli
   ALIAS_COMMAND="java -Djavax.net.ssl.trustStore=${KEYSTOREFILE} -Djavax.net.ssl.trustStorePassword=${KEYSTOREPASS} -jar $JENKINS_SCRIPTS_HOME/jenkins-cli.jar -webSocket -s "'$JENKINS_URL'
 
-  read -p "Do you want to reset the .jenkins-cli file and start afresh? (y/n): " -n 1 -r IS_CONTINUE
-  if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
+  RESET_JENKINS_CLI_FILE=false
+  ALIAS_COMMAND_PRESENT=false
+  grep -qxF 'alias jcli=' dotfiles/.jenkins-cli || ALIAS_COMMAND_PRESENT=true
+  echo $ALIAS_COMMAND_PRESENT
+  if [ "$ALIAS_COMMAND_PRESENT" = false ]; then
+    RESET_JENKINS_CLI_FILE=true
+  else
+    read -p "Do you want to reset the .jenkins-cli file and start afresh? (y/n): " -n 1 -r IS_CONTINUE
+    if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
+      RESET_JENKINS_CLI_FILE=true
+    fi
+  fi
+
+  if [ "$RESET_JENKINS_CLI_FILE" = true ]; then
     git checkout -- dotfiles/.jenkins-cli
+    echo '' >>dotfiles/.jenkins-cli
     echo "alias jcli=\"$ALIAS_COMMAND\"" >>dotfiles/.jenkins-cli
   fi
 
   echo "alias $JENKINS_ALIAS='export JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$SCRIPT_MSID JENKINS_API_TOKEN=$SCRIPT_API_TOKEN \
-  && echo \"JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$JENKINS_USER_ID\"'" >>dotfiles/.jenkins-cli
+&& echo "'"JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$JENKINS_USER_ID"'"'" >>dotfiles/.jenkins-cli
+  echo "$JENKINS_ALIAS" >>dotfiles/.jenkins-cli
 
   echo "Update ~/.bash_profile with Jenkins CLI info"
   BASH_PROFILE=~/.bash_profile
   touch $BASH_PROFILE
 
   ADD_SOURCE=false
-  grep -qxF '# import `.jenkins-cli` if it exists' $BASH_PROFILE || ADD_SOURCE=true
+  grep -qxF "# import '$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' if it exists" $BASH_PROFILE || ADD_SOURCE=true
   if [ "$ADD_SOURCE" = true ]; then
     echo '' >>$BASH_PROFILE
     echo '#########################################' >>$BASH_PROFILE
     echo '# Jenkins CLI' >>$BASH_PROFILE
     echo "export JENKINS_SCRIPTS_HOME=$JENKINS_SCRIPTS_HOME" >>$BASH_PROFILE
     echo 'export PATH="$JENKINS_SCRIPTS_HOME:$PATH"' >>$BASH_PROFILE
-    echo '# import `~/.jenkins-cli` if it exists' >>$BASH_PROFILE
+    echo "# import '$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' if it exists" >>$BASH_PROFILE
     echo 'if [ -f $JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli ]; then' >>$BASH_PROFILE
     echo '  source $JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' >>$BASH_PROFILE
     echo 'fi' >>$BASH_PROFILE
