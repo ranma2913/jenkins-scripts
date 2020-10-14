@@ -1,9 +1,11 @@
 #!/bin/bash
 #########################################
 # Jenkins CLI
-alias jenkinsUrlLegacy='export JENKINS_URL=https://jenkins.optum.com/riptide/ && echo "JENKINS_URL=$JENKINS_URL"'
-alias jenkinsUrlNew='export JENKINS_URL=https://riptide-jenkins-legacy.optum.com/ && echo "JENKINS_URL=$JENKINS_URL"'
-alias jenkinsUrlCloud='export JENKINS_URL=https://riptide-jenkins-cloud.optum.com/ && echo "JENKINS_URL=$JENKINS_URL"'
-alias jenkinsUrlDevOps='export JENKINS_URL=https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/ && echo "JENKINS_URL=$JENKINS_URL"'
-jenkinsUrlDevOps
-alias jcli="java -Djavax.net.ssl.trustStore=/Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkinsKeyStore -Djavax.net.ssl.trustStorePassword=changeme -jar /Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkins-cli.jar -s $JENKINS_URL"
+
+alias jcli="java -Djavax.net.ssl.trustStore=/Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkinsKeyStore -Djavax.net.ssl.trustStorePassword=changeme -jar /Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkins-cli.jar -webSocket"
+alias riptideJenkinsDevops='export JENKINS_URL=https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/ JENKINS_USER_ID=jsticha JENKINS_API_TOKEN=1163c43c92a7a508c1760f6991de4ae08d   && echo "JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$JENKINS_USER_ID"'
+riptideJenkinsDevops
+
+alias jcli="java -Djavax.net.ssl.trustStore=/Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkinsKeyStore -Djavax.net.ssl.trustStorePassword=changeme -jar /Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkins-cli.jar -webSocket -s $JENKINS_URL"
+alias riptideJenkinsCloud='export JENKINS_URL=https://riptide-jenkins-cloud.optum.com/ JENKINS_USER_ID=jsticha JENKINS_API_TOKEN=117c963e46ba5c0e7e7ca7e9ef3e23b627 && echo "JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$JENKINS_USER_ID"'
+riptideJenkinsCloud
