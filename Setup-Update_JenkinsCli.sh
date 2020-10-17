@@ -85,7 +85,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
     curl ${JENKINS_URL}/jnlpJars/jenkins-cli.jar --output jenkins-cli.jar
   fi
 
-  ALIAS_COMMAND="java -Djavax.net.ssl.trustStore=${KEYSTOREFILE} -Djavax.net.ssl.trustStorePassword=${KEYSTOREPASS} -jar $JENKINS_SCRIPTS_HOME/jenkins-cli.jar -webSocket -s "'$JENKINS_URL'
+  ALIAS_COMMAND="java -Djavax.net.ssl.trustStore=${KEYSTOREFILE} -Djavax.net.ssl.trustStorePassword=${KEYSTOREPASS} -jar $JENKINS_SCRIPTS_HOME/jenkins-cli.jar -s \$JENKINS_URL -webSocket"
 
   RESET_JENKINS_CLI_FILE=false
   ALIAS_COMMAND_PRESENT=false
