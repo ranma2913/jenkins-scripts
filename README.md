@@ -21,5 +21,5 @@ jcli
 # Usage
 Reference: https://xanderx.com/post/run-jenkins-script-console-scripts-from-command-line-without-remoting/
 ```
-jcli groovy =< optum/deleteJobHistory.groovy
+jcli groovy =< optum/delete_job_history.groovy
 ```

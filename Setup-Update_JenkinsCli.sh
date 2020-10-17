@@ -107,7 +107,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   fi
 
   echo "alias $JENKINS_ALIAS='export JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$SCRIPT_MSID JENKINS_API_TOKEN=$SCRIPT_API_TOKEN \
-&& echo "'"JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$JENKINS_USER_ID"'"'" >>dotfiles/.jenkins-cli
+&& echo "'"ALIAS='$JENKINS_ALIAS' JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$JENKINS_USER_ID"'"'" >>dotfiles/.jenkins-cli
   echo "$JENKINS_ALIAS" >>dotfiles/.jenkins-cli
 
   echo "Update ~/.bash_profile with Jenkins CLI info"
