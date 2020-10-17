@@ -4,9 +4,9 @@ import jenkins.*
 import jenkins.model.*
 import org.jenkinsci.plugins.workflow.job.*
 
-def MAX_BUILDS = 2
-//def itemNameMatcher = "/"
-def itemNameMatcher = "Fortify_Scan/covid-portal/"
+def MAX_BUILDS = 5
+def itemNameMatcher = "/"
+//def itemNameMatcher = "Fortify_Scan/covid-portal/"
 //def itemNameMatcher = "Fortify_Scan/"
 def jobsToDelete = []
 
