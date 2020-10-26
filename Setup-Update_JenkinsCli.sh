@@ -13,7 +13,7 @@ function disableXtrace() {
   set +o xtrace
 }
 KEYSTOREFILE="$JENKINS_SCRIPTS_HOME/jenkinsKeyStore"
-KEYSTOREPASS=changeme
+KEYSTOREPASS=changeit
 
 # Enable verbose output
 enableXtrace
@@ -32,6 +32,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   UPDATE_KEYSTORE=false
   RESET_KEYSTORE=false
   if test -f $KEYSTOREFILE; then
+    #    TODO:jsticha need to switch to use optum standard keystore.
     read -p "Do you want to update the jenkinsKeyStore? (y/n): " -n 1 -r IS_CONTINUE
     if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
       UPDATE_KEYSTORE=true
