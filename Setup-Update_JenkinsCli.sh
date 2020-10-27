@@ -1,22 +1,32 @@
 #!/bin/bash
+
+function enableXtrace() {
+  echo " ...Enable xtrace"
+  set -o xtrace
+}
+function disableXtrace() {
+  echo " ...Disable xtrace"
+  set +o xtrace
+}
+
+read -p "Verbose Output? (y/n): [n] " -n 1 -r IS_CONTINUE
+IS_CONTINUE=${IS_CONTINUE:-n}
+if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
+  # Enable verbose output
+  enableXtrace
+else
+  disableXtrace
+fi
+
 JENKINS_SCRIPTS_HOME=$(pwd)
 echo "This utility installs, updates, or configures the Jenkins CLI"
-printf "\nThe current .jenkins-cli looks like:\n>>>>\n"
+printf "The current .jenkins-cli looks like:\n>>>>\n"
 cat "$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli"
 printf '\n<<<<\n'
 
 read -p "Are you sure you want to continue? (y/n): " -n 1 -r IS_CONTINUE
-function enableXtrace() {
-  set -o xtrace
-}
-function disableXtrace() {
-  set +o xtrace
-}
-KEYSTOREFILE="$JENKINS_SCRIPTS_HOME/jenkinsKeyStore"
-KEYSTOREPASS=changeme
-
-# Enable verbose output
-enableXtrace
+KEYSTOREFILE="$JENKINS_SCRIPTS_HOME/jenkins.jks"
+KEYSTOREPASS=changeit
 
 read -p 'Please enter your jenkins url. (ex. https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/): ' JENKINS_URL
 JENKINS_URL=${JENKINS_URL:-https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/}
@@ -32,7 +42,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   UPDATE_KEYSTORE=false
   RESET_KEYSTORE=false
   if test -f $KEYSTOREFILE; then
-    read -p "Do you want to update the jenkinsKeyStore? (y/n): " -n 1 -r IS_CONTINUE
+    read -p "Do you want to update the jenkins.jks? (y/n): " -n 1 -r IS_CONTINUE
     if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
       UPDATE_KEYSTORE=true
     fi
@@ -42,29 +52,38 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   fi
   if [ "$RESET_KEYSTORE" = true ]; then
     # Initialize an empty keystore
-    rm $KEYSTOREFILE
-    keytool -genkeypair -alias boguscert -storepass $KEYSTOREPASS -keypass $KEYSTOREPASS -keystore $KEYSTOREFILE -dname "CN=Developer, OU=Department, O=Company, L=City, ST=State, C=CA"
-    keytool -delete -alias boguscert -storepass $KEYSTOREPASS -keystore $KEYSTOREFILE
+    rm "${KEYSTOREFILE}"
+    keytool -genkeypair -alias boguscert -storepass ${KEYSTOREPASS} -keypass ${KEYSTOREPASS} -keystore "${KEYSTOREFILE}" -dname "CN=Developer, OU=Department, O=Company, L=City, ST=State, C=CA"
+    keytool -delete -alias boguscert -storepass ${KEYSTOREPASS} -keystore "${KEYSTOREFILE}"
   fi
 
   if [ "$UPDATE_KEYSTORE" = true ]; then
+    CERT_ALIAS=Optum_Root_CA
+    # Remove old cert
+    keytool -delete -alias ${CERT_ALIAS} -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS} || echo "${CERT_ALIAS} already deleted."
     # get the SSL certificate
-    curl https://repo1.uhc.com/artifactory/UHG-certificates/optum/Optum_Root_CA.cer --output Optum_Root_CA.cer
+    curl https://repo1.uhc.com/artifactory/UHG-certificates/optum/Optum_Root_CA.cer --output ${CERT_ALIAS}.pem
     # import certificate
-    keytool -import -noprompt -trustcacerts -alias Optum_Root_CA -file Optum_Root_CA.cer -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS}
+    keytool -import -noprompt -trustcacerts -alias ${CERT_ALIAS} -file ${CERT_ALIAS}.pem -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
 
     if [[ $JENKINS_URL == https* ]]; then
       TRIMMED_URL=$(echo "$JENKINS_URL" | awk -F/ '{print $3}')
-      echo "Getting Cert for $TRIMMED_URL"
-      echo QUIT |
-        openssl s_client -showcerts -connect $TRIMMED_URL:443 -servername $TRIMMED_URL |
-        awk '/-----BEGIN CERTIFICATE-----/ {p=1}; p; /-----END CERTIFICATE-----/ {p=0}' >"${TRIMMED_URL}.cer"
-      # import certificate
-      keytool -import -noprompt -trustcacerts -alias $TRIMMED_URL -file "$TRIMMED_URL.cer" -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS}
+      read -p "Do you want to update the jenkins.jks with a custom cert from your jenkins instance [$TRIMMED_URL]? (y/n): " -n 1 -r IS_CONTINUE
+      if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
+        echo "Getting Cert for $TRIMMED_URL"
+        echo QUIT |
+          openssl s_client -showcerts -connect $TRIMMED_URL:443 -servername $TRIMMED_URL |
+          awk '/-----BEGIN CERTIFICATE-----/ {p=1}; p; /-----END CERTIFICATE-----/ {p=0}' >"${TRIMMED_URL}.cer"
+        # Remove old cert
+        keytool -delete -alias "${TRIMMED_URL}" -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS} || echo "${TRIMMED_URL} already deleted."
+        # import certificate
+        keytool -import -noprompt -trustcacerts -alias "${TRIMMED_URL}" -file "${TRIMMED_URL}.cer" -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
+      fi
     fi
 
     # verify that the certificate is listed
-    keytool -list -v -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS}
+    KEYSTOREFILE="/Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkins.jks"
+    keytool -list -v -keystore "${KEYSTOREFILE}" -storepass changeit
     echo ''
   fi
 
