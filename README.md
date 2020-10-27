@@ -7,16 +7,21 @@ Install the following tools with Home Brew
 - gnu-sed
 - html-xml-utils
 
-# Installation
+# Jenkins CLI Installation MacOS
 Reference: https://www.jenkins.io/doc/book/managing/cli/#using-the-cli-client
+1. Checkout this repository in your machine. 
+2. Run the setup shell script:
 ```
 Setup-Update_JenkinsCli.sh
 ```
 
 ## Test your installation
+Run the following command in your terminal
 ```
 jcli
 ```
+The output should look something like the following if everything is working correctly:
+
 
 # Usage
 Reference: https://xanderx.com/post/run-jenkins-script-console-scripts-from-command-line-without-remoting/
