@@ -28,10 +28,11 @@ version = new Version(major: project.property('version.major'),
 
 defaultTasks 'clean', 'compileTestGroovy'
 
-project.group = 'com.optum.riptide.jenkins.pipeline.library'
+project.group = 'com.optum.jenkins.cli'
 project.version = '1.0.0-SNAPSHOT'
 
-mainClassName = 'com.optum.jenkins.pipeline.library.cli.Application'
+// mainClassName property required for gradle plugin build.
+mainClassName = 'com.optum.jenkins.cli.Application'
 
 artifactory {
     contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
