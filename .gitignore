@@ -22,6 +22,8 @@ node/
 node_modules/
 app-bundle.js
 fortify_results/
+.gradle/*
+gradle/wrapper/
 
 ############################################
 # Eclipse Files:
@@ -36,13 +38,15 @@ mvnw
 mvnw.cmd
 .mvn/
 
-
 ############################################
 # IntelliJ Files
 *.eml
 *.iml
-.idea/
+.idea/*
+!.idea/runConfigurations/
 .factorypath
 
-
 ############################################
+# local Jenkins CLI files
+jenkins-cli.jar
+jenkins.jks
