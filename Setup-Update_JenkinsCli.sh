@@ -62,9 +62,9 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
     # Remove old cert
     keytool -delete -alias ${CERT_ALIAS} -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS} || echo "${CERT_ALIAS} already deleted."
     # get the SSL certificate
-    curl https://repo1.uhc.com/artifactory/UHG-certificates/optum/Optum_Root_CA.cer --output ${CERT_ALIAS}.pem
+    curl https://repo1.uhc.com/artifactory/UHG-certificates/optum/Optum_Root_CA.cer --output build/tmp/${CERT_ALIAS}.pem
     # import certificate
-    keytool -import -noprompt -trustcacerts -alias ${CERT_ALIAS} -file ${CERT_ALIAS}.pem -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
+    keytool -import -noprompt -trustcacerts -alias ${CERT_ALIAS} -file build/tmp/${CERT_ALIAS}.pem -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
 
     if [[ $JENKINS_URL == https* ]]; then
       TRIMMED_URL=$(echo "$JENKINS_URL" | awk -F/ '{print $3}')
@@ -73,11 +73,11 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
         echo "Getting Cert for $TRIMMED_URL"
         echo QUIT |
           openssl s_client -showcerts -connect $TRIMMED_URL:443 -servername $TRIMMED_URL |
-          awk '/-----BEGIN CERTIFICATE-----/ {p=1}; p; /-----END CERTIFICATE-----/ {p=0}' >"${TRIMMED_URL}.cer"
+          awk '/-----BEGIN CERTIFICATE-----/ {p=1}; p; /-----END CERTIFICATE-----/ {p=0}' >"build/tmp/${TRIMMED_URL}.cer"
         # Remove old cert
         keytool -delete -alias "${TRIMMED_URL}" -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS} || echo "${TRIMMED_URL} already deleted."
         # import certificate
-        keytool -import -noprompt -trustcacerts -alias "${TRIMMED_URL}" -file "${TRIMMED_URL}.cer" -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
+        keytool -import -noprompt -trustcacerts -alias "${TRIMMED_URL}" -file "build/tmp/${TRIMMED_URL}.cer" -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
       fi
     fi
 
