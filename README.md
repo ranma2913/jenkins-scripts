@@ -2,8 +2,7 @@
 Handy Groovy Console Scripts for Jenkins and CloudBees Jenkins Platform
 
 ## Requirements:
-Install the following tools with Home Brew
-
+Install the following tools with HomeBrew
 - gnu-sed
 - html-xml-utils
 
@@ -22,6 +21,7 @@ jcli
 ```
 The output should look something like the following if everything is working correctly:
 
+![Successful Installation](docs/images/2020-10-27_15-03-23.png)
 
 # Usage
 Reference: https://xanderx.com/post/run-jenkins-script-console-scripts-from-command-line-without-remoting/
