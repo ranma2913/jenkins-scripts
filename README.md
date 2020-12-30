@@ -25,6 +25,32 @@ The output should look something like the following if everything is working cor
 
 # Usage
 Reference: https://xanderx.com/post/run-jenkins-script-console-scripts-from-command-line-without-remoting/
+
+Delete job history
 ```
 jcli groovy =< scripts/delete_job_history.groovy
+```
+Delete artifacts from jobs
+```
+jcli groovy =< scripts/delete_artifacts.groovy
+```
+Delete logs from jobs
+```
+jcli groovy =< scripts/delete_logs.groovy
+```
+
+## Useful Shell Commands
+Show file sizes in a directory
+```
+ls -l --block-size=M /var/lib/jenkins
+```
+Summary Disk Usage Recursive
+```
+du -shc /var/lib/jenkins/*
+du -h --max-depth=1 /var/lib/jenkins
+du -h /var/lib/jenkins/ | sort -rh | head -5
+```
+Shows disk space in human-readable format
+```
+df -h
 ```
