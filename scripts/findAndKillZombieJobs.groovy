@@ -5,13 +5,13 @@ import jenkins.model.*
 import org.jenkinsci.plugins.workflow.job.*
 
 itemNameMatcherList = [
-//        /B360_Jobs/,
+        /OpenShift_UserSync\/ocp-ctc-core-nonprod.optum.com/,
 //        /emr-poca/,
 //        /cdb-locked-accounts/,
 //        /sox-reporting_Jobs/,
 //        /Espresso_Jobs/,
 //        /WidgetFactory_Jobs/,
-/pafs_ATDD_parallel7$/,
+//        /pafs_ATDD_parallel7$/,
 ]
 def abortJobs = false
 def itemsNotProcessed = [:]

@@ -22,12 +22,12 @@ Jenkins.instance.getAllItems(Job.class).each { job ->
                 def artifacts = build.artifacts
                 artifacts.each { artifact ->
                     totalSize += artifact.getFileSize()
-                    println("$artifact, ${artifact.getFileSize()}k")
+                    println("$artifact, ${artifact.getFileSize()}")
                 }
                 build.deleteArtifacts()
             }
         }
     }
 }
-println "Total size: ${totalSize}k"
+println "Total size: ${totalSize}"
 return "************************************************* END ******************************************************************"

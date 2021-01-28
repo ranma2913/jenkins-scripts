@@ -38,6 +38,10 @@ Delete logs from jobs
 ```
 jcli groovy =< scripts/delete_logs.groovy
 ```
+Kill Zombie Jobs
+```
+jcli groovy =< scripts/findAndKillZombieJobs.groovy
+```
 
 ## Useful Shell Commands
 Show file sizes in a directory
