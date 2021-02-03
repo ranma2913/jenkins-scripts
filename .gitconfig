@@ -1,0 +1,7 @@
+[submodule]
+	active = .
+	recurse = true
+[diff]
+	submodule = log
+[push]
+	recurseSubmodules = on-demand

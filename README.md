@@ -13,12 +13,15 @@ This project has a [submodule(s)](https://git-scm.com/book/en/v2/Git-Tools-Submo
 When you clone such a project, by default you get the directories that contain submodules, 
 but none of the files within them yet:
 ```
-git clone --recurse-submodules https://github.optum.com/riptide-devops/jenkins-scripts.git
+git clone --recurse-submodules https://github.optum.com/riptide-devops/jenkins-scripts.git && \
+cd jenkins-scripts && \
+git config --local include.path .gitconfig
 ```
 To also initialize, fetch and checkout any nested submodules, you can use the foolproof 
 ```
 git submodule update --init --recursive
 ```
+If you run `git submodule update --remote`, Git will go into your submodules and fetch and update for you.
 
 # Jenkins CLI Installation MacOS
 Reference: https://www.jenkins.io/doc/book/managing/cli/#using-the-cli-client
