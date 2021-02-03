@@ -6,6 +6,18 @@ Install the following tools with HomeBrew
 - gnu-sed
 - html-xml-utils
 
+## Checking out the project from Git
+This project has a [submodule(s)](https://git-scm.com/book/en/v2/Git-Tools-Submodules). 
+When you clone such a project, by default you get the directories that contain submodules, 
+but none of the files within them yet:
+```
+git clone --recurse-submodules https://github.optum.com/riptide-devops/jenkins-scripts.git
+```
+To also initialize, fetch and checkout any nested submodules, you can use the foolproof 
+```
+git submodule update --init --recursive
+```
+
 # Jenkins CLI Installation MacOS
 Reference: https://www.jenkins.io/doc/book/managing/cli/#using-the-cli-client
 1. Checkout this repository in your machine. 
