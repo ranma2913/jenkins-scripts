@@ -1,6 +1,8 @@
 # jenkins-scripts
 Handy Groovy Console Scripts for Jenkins and CloudBees Jenkins Platform
 
+# CAUTION THE SCRIPTS CONSOLE IS VERY POWERFUL AND THUS DANGEROUS. It's recommended you backup your jenkins instance before running any scripts.
+
 ## Requirements:
 Install the following tools with HomeBrew
 - gnu-sed
