@@ -1,3 +1,9 @@
 [submodule "cloudbees"]
 	path = cloudbees
 	url = https://github.com/cloudbees/jenkins-scripts
+[submodule "samrocketman"]
+	path = samrocketman
+	url = https://github.com/samrocketman/jenkins-script-console-scripts
+[submodule "jenkinsci"]
+	path = jenkinsci
+	url = https://github.com/jenkinsci/jenkins-scripts
