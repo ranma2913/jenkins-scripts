@@ -58,6 +58,8 @@ jcli groovy =< scripts/delete_logs.groovy
 Kill Zombie Jobs
 ```
 jcli groovy =< scripts/findAndKillZombieJobs.groovy
+jcli groovy =< optum/Jenkins_Abort_Jobs.groovy
+jcli groovy =< optum/Jenkins_Abort_All_Jobs.groovy
 ```
 
 ## Useful Shell Commands
