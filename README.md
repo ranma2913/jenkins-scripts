@@ -68,12 +68,43 @@ Show file sizes in a directory
 ls -l --block-size=M /var/lib/jenkins
 ```
 Summary Disk Usage Recursive
+
 ```
 du -shc /var/lib/jenkins/*
 du -h --max-depth=1 /var/lib/jenkins
 du -h /var/lib/jenkins/ | sort -rh | head -5
 ```
+
 Shows disk space in human-readable format
+
 ```
 df -h
+```
+
+## Shell Script Commands: Cleanup File System
+
+Check Logs Directory Usage
+
+```bash
+du -ah $JENKINS_HOME/logs
+```
+
+Delete .gz log files
+
+```bash
+ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.gz$" | xargs -d"\n" rm -v
+```
+
+Delete rolled logs
+
+```bash
+ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$" | xargs -d"\n" rm -v
+```
+
+Delete HTML Autid Logs (One of the largest File System Hogs)
+
+```bash
+du -ah $JENKINS_HOME/logs/audit/html
+ls $JENKINS_HOME/logs/audit/html | grep -P "^audit-\d{4}-\d{2}-\d{2}.html$" | xargs -d"\n" rm -v
+du -ah $JENKINS_HOME/logs/audit/html
 ```
