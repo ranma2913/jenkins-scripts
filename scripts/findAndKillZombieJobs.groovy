@@ -5,15 +5,15 @@ import jenkins.model.*
 import org.jenkinsci.plugins.workflow.job.*
 
 itemNameMatcherList = [
-        /OpenShift_UserSync\/ocp-ctc-core-nonprod.optum.com/,
+//        /OpenShift_UserSync\/ocp-ctc-core-nonprod.optum.com/,
 //        /emr-poca/,
 //        /cdb-locked-accounts/,
 //        /sox-reporting_Jobs/,
-//        /Espresso_Jobs/,
+/Espresso_Jobs/,
 //        /WidgetFactory_Jobs/,
 //        /pafs_ATDD_parallel7$/,
 ]
-def abortJobs = false
+def abortJobs = true
 def itemsNotProcessed = [:]
 def jobsFoundMatchingSearch = 0
 def jobsFoundInClassesToAbort = 0

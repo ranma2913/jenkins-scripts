@@ -9,12 +9,13 @@ itemNameMatcherList = [
 //        /emr-poca/,
 //        /cdb-locked-accounts/,
 //        /sox-reporting_Jobs/,
-//        /Espresso_Jobs/,
+/sso/,
+/tops/,
 //        /WidgetFactory_Jobs/,
 ///pafs_ATDD_parallel7$/,
-/OpenShift_UserSync/,
+///OpenShift_UserSync/,
 ]
-def abortJobs = false
+def abortJobs = true
 def itemsNotProcessed = [:]
 def jobsFoundMatchingSearch = 0
 def jobsFoundInClassesToAbort = 0

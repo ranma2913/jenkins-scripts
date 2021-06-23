@@ -5,7 +5,8 @@ import jenkins.model.Jenkins
 // Run this from the Jenkins console (Manage Jenkins, Manage Nodes, master, Script Console)
 
 //def itemNameMatcher = "/"
-//def itemNameMatcher = "Fortify_Scan/covid-portal/"
+//def itemNameMatcher = "Build_And_Deploy/"
+//def itemNameMatcher = "Fortify_Scan/"
 def itemNameMatcher = "Sonar_Scan/"
 def numBuildsKeepLogs = 2
 
