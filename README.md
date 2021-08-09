@@ -55,21 +55,33 @@ Delete logs from jobs
 ```
 jcli groovy =< scripts/delete_logs.groovy
 ```
+
 Kill Zombie Jobs
+
 ```
 jcli groovy =< scripts/findAndKillZombieJobs.groovy
 jcli groovy =< optum/Jenkins_Abort_Jobs.groovy
 jcli groovy =< optum/Jenkins_Abort_All_Jobs.groovy
 ```
 
-## Useful Shell Commands
+## Plugin Tips:
+
+- Uninstall: [Job Configuration History Plugin](https://plugins.jenkins.io/jobConfigHistory) if you have any GitHub Org
+  Jobs
+
+## Shell Script Commands: Cleanup File System
+
+### Useful Shell Commands
+
 Show file sizes in a directory
-```
+
+```bash
 ls -l --block-size=M /var/lib/jenkins
 ```
+
 Summary Disk Usage Recursive
 
-```
+```bash
 du -shc /var/lib/jenkins/*
 du -h --max-depth=1 /var/lib/jenkins
 du -h /var/lib/jenkins/ | sort -rh | head -5
@@ -77,34 +89,44 @@ du -h /var/lib/jenkins/ | sort -rh | head -5
 
 Shows disk space in human-readable format
 
-```
+```bash
 df -h
 ```
-
-## Shell Script Commands: Cleanup File System
-
 Check Logs Directory Usage
 
 ```bash
 du -ah $JENKINS_HOME/logs
 ```
 
+### Cleanup Shell Commands
 Delete .gz log files
 
 ```bash
-ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.gz$" | xargs -d"\n" rm -v
+find $JENKINS_HOME/logs \
+  -name "*.gz" \
+  -printf '%p' \
+  -delete
 ```
 
 Delete rolled logs
 
 ```bash
-ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$" | xargs -d"\n" rm -v
+echo "Files to Delete:" && ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$"
+ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$" | xargs -d "\n" -I {} rm -v {}
 ```
 
-Delete HTML Autid Logs (One of the largest File System Hogs)
+Delete HTML Audit Logs (One of the largest File System Hogs)
 
 ```bash
 du -ah $JENKINS_HOME/logs/audit/html
-ls $JENKINS_HOME/logs/audit/html | grep -P "^audit-\d{4}-\d{2}-\d{2}.html$" | xargs -d"\n" rm -v
+ls $JENKINS_HOME/logs/audit/html | grep -P "^audit-\d{4}-\d{2}-\d{2}.html$" | xargs -d "\n" -I {} rm -v {}
 du -ah $JENKINS_HOME/logs/audit/html
+```
+
+Delete Pipeline Config History
+
+```bash
+du -h -d 1 $JENKINS_HOME/pipeline-config-history
+rm -rfv $JENKINS_HOME/pipeline-config-history/**/*
+du -ah $JENKINS_HOME/pipeline-config-history
 ```
