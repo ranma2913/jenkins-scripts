@@ -4,20 +4,20 @@ import jenkins.*
 import jenkins.model.*
 import org.jenkinsci.plugins.workflow.job.*
 
-def MAX_BUILDS = 5
+def MAX_BUILDS = 4
 //def itemNameMatcher = "/"
-def itemNameMatcher = "OpenShift_UserSync/"
-//def itemNameMatcher = "Fortify_Scan/"
+//def itemNameMatcher = "OpenShift_UserSync/"
+def itemNameMatcher = "Fortify_Scan/"
 def jobsToDelete = []
 
 println("************************************************** START ***************************************************************")
 Jenkins.instance.getAllItems(Job.class).each { job ->
-    if ((job.fullName =~ itemNameMatcher).find()) {
-        def recent = job.builds.limit(MAX_BUILDS)
-        for (build in job.builds) {
-            if (!recent.contains(build)) {
-                jobsToDelete.add(build)
-            }
+  if ((job.fullName =~ itemNameMatcher).find()) {
+    def recent = job.builds.limit(MAX_BUILDS)
+    for (build in job.builds) {
+      if (!recent.contains(build)) {
+        jobsToDelete.add(build)
+      }
         }
     }
 }

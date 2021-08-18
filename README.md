@@ -127,6 +127,6 @@ Delete Pipeline Config History
 
 ```bash
 du -h -d 1 $JENKINS_HOME/pipeline-config-history
-rm -rfv $JENKINS_HOME/pipeline-config-history/**/*
+rm -rfv $JENKINS_HOME/pipeline-config-history/**/* && \
 du -ah $JENKINS_HOME/pipeline-config-history
 ```
