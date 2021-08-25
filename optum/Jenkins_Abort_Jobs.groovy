@@ -9,13 +9,12 @@ itemNameMatcherList = [
 //        /emr-poca/,
 //        /cdb-locked-accounts/,
 //        /sox-reporting_Jobs/,
-/sso/,
-/tops/,
+/EzComm/,
 //        /WidgetFactory_Jobs/,
 ///pafs_ATDD_parallel7$/,
 ///OpenShift_UserSync/,
 ]
-def abortJobs = true
+Boolean abortJobs = true
 def itemsNotProcessed = [:]
 def jobsFoundMatchingSearch = 0
 def jobsFoundInClassesToAbort = 0
@@ -71,7 +70,7 @@ itemNameMatcherList.each() { itemNameMatcher ->
                             )
                         } else {
                             def executor = run.getExecutor()
-                            if (executor.isActive()) {
+                            if (executor?.isActive()) {
                                 printHelper(vo, "$executor")
                                 executor.interrupt(hudson.model.Result.ABORTED)
                             }

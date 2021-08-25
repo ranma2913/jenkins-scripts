@@ -9,7 +9,7 @@ itemNameMatcherList = [
 //        /emr-poca/,
 //        /cdb-locked-accounts/,
 //        /sox-reporting_Jobs/,
-/Espresso_Jobs/,
+///Espresso_Jobs/,
 //        /WidgetFactory_Jobs/,
 //        /pafs_ATDD_parallel7$/,
 ]

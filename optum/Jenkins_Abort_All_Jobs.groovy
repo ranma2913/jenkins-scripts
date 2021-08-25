@@ -8,9 +8,9 @@ def jobsFoundMatchingSearch = 0
 def jobsFoundInClassesToAbort = 0
 def jobsAborted = 0
 
-def vo = false
+Boolean vo = false
 
-def printHelper(def verboseOutput, def string) {
+def printHelper(Boolean verboseOutput, def string) {
     if (verboseOutput) {
         println(string)
     }
