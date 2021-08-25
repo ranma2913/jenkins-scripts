@@ -131,3 +131,11 @@ du -h -d 1 $JENKINS_HOME/pipeline-config-history
 rm -rfv $JENKINS_HOME/pipeline-config-history/**/* && \
 du -ah $JENKINS_HOME/pipeline-config-history
 ```
+
+Delete Espresso Job Log files
+
+```bash
+find -wholename "*sni-members-api-tempregression/*/log" \
+  -printf '\n%p' \
+  -delete
+```
