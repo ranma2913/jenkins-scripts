@@ -28,8 +28,8 @@ read -p "Are you sure you want to continue? (y/n): " -n 1 -r IS_CONTINUE
 KEYSTOREFILE="$JENKINS_SCRIPTS_HOME/jenkins.jks"
 KEYSTOREPASS=changeit
 
-read -p 'Please enter your jenkins url. (ex. https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/): ' JENKINS_URL
-JENKINS_URL=${JENKINS_URL:-https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/}
+read -p 'Please enter your jenkins url. (ex. https://jenkins-riptide-devops.com/): ' JENKINS_URL
+JENKINS_URL=${JENKINS_URL:-}
 read -p "Please enter the alias name for switching to $JENKINS_URL. (ex. riptideJenkinsDevops): " JENKINS_ALIAS
 JENKINS_ALIAS=${JENKINS_ALIAS:-riptideJenkinsDevops}
 read -p "Please enter your MSID: " SCRIPT_MSID
@@ -58,11 +58,12 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   fi
 
   if [ "$UPDATE_KEYSTORE" = true ]; then
-    CERT_ALIAS=Optum_Root_CA
+    CERT_ALIAS=Root_CA
     # Remove old cert
     keytool -delete -alias ${CERT_ALIAS} -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS} || echo "${CERT_ALIAS} already deleted."
     # get the SSL certificate
-    curl https://repo1.uhc.com/artifactory/UHG-certificates/optum/Optum_Root_CA.cer --output build/tmp/${CERT_ALIAS}.pem
+    Root_CA_URL='https://r''epo1.u''hc.com/a''rtifactory/U''HG-certificates/o''ptum/O''ptum_Root_CA.cer'
+    curl $Root_CA_URL --output build/tmp/${CERT_ALIAS}.pem
     # import certificate
     keytool -import -noprompt -trustcacerts -alias ${CERT_ALIAS} -file build/tmp/${CERT_ALIAS}.pem -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
 

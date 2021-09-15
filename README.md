@@ -13,7 +13,7 @@ This project has a [submodule(s)](https://git-scm.com/book/en/v2/Git-Tools-Submo
 When you clone such a project, by default you get the directories that contain submodules, 
 but none of the files within them yet:
 ```
-git clone --recurse-submodules https://github.optum.com/riptide-devops/jenkins-scripts.git && \
+git clone --recurse-submodules https://<githubhost>/riptide-devops/jenkins-scripts.git && \
 cd jenkins-scripts && \
 git config --local include.path .gitconfig
 ```
@@ -60,9 +60,9 @@ Kill Zombie Jobs
 
 ```
 jcli groovy =< scripts/findAndKillZombieJobs.groovy
-jcli groovy =< optum/Jenkins_Abort_Jobs.groovy
-jcli groovy =< optum/Jenkins_Abort_All_Jobs.groovy
-jcli groovy =< optum/Jenkins_Abort_Build_Queue.groovy
+jcli groovy =< riptide/Jenkins_Abort_Jobs.groovy
+jcli groovy =< riptide/Jenkins_Abort_All_Jobs.groovy
+jcli groovy =< riptide/Jenkins_Abort_Build_Queue.groovy
 ```
 
 ## Plugin Tips:
