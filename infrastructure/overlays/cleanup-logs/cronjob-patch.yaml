@@ -14,7 +14,7 @@ spec:
   #      |      │ │ │ │ │
   #      |      │ │ │ │ │
   # CRON_TZ=UTC * * * * *
-  schedule: "CRON_TZ=UTC @midnight" # Run once a day CST Midnight
+  schedule: "@midnight" # Run once a day CST Midnight
   #  schedule: '*/5 * * * *'
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2
