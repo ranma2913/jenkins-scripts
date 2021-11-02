@@ -8,7 +8,8 @@ Queue queue = Jenkins.instance.queue
 println("Queue Length = ${queue.getItems().size()}")
 println("cancelQueuedItems=$cancelQueuedItems")
 
-queue.items.findAll { it.task.name.startsWith('my') }.each() {
+queue.items.each() {
+  println("Task = ${it.task}")
   if (cancelQueuedItems) {
     try {
       countAttemptedCancel++
