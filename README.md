@@ -87,6 +87,7 @@ Kill Zombie Jobs
 jcli groovy =< scripts/findAndKillZombieJobs.groovy
 jcli groovy =< riptide/Jenkins_Abort_Jobs.groovy
 jcli groovy =< riptide/Jenkins_Abort_All_Jobs.groovy
+jcli groovy =< riptide/Kill_Running_Jobs.groovy
 jcli groovy =< riptide/Jenkins_Cancel_Queued_Tasks.groovy
 ```
 
