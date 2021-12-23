@@ -93,6 +93,7 @@ Shows disk space in human-readable format
 ```bash
 df -h
 ```
+
 Check Logs Directory Usage
 
 ```bash
@@ -100,6 +101,22 @@ du -ah $JENKINS_HOME/logs
 ```
 
 ### Cleanup Shell Commands
+
+[Delete thousands of files quickly](https://unix.stackexchange.com/a/79656/421923)
+Using rsync is surprising fast and simple.
+
+1. make an empty dir:
+
+```shell
+mkdir -p $JENKINS_HOME/jobs/empty_dir
+```
+
+2. Rsync with --delete flag to delete files quickly:
+
+```shell
+rsync --one-file-system -avzP --itemize-changes --delete "$JENKINS_HOME/jobs/empty_dir/" "$JENKINS_HOME/jobs/Fortify_Scan/"
+```
+
 Delete .gz log files
 
 ```bash
