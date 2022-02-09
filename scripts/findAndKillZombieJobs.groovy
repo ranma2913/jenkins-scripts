@@ -9,6 +9,7 @@ itemNameMatcherList = [
 //        /sox-reporting_Jobs/,
 //        /Espresso_Jobs/,
 //        /WidgetFactory_Jobs/,
+/Sonar_Scan\//
 ]
 def abortJobs = true
 def itemsNotProcessed = [:]
