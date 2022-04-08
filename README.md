@@ -162,6 +162,15 @@ rm -rfv $JENKINS_HOME/pipeline-config-history/**/* && \
 du -ah $JENKINS_HOME/pipeline-config-history
 ```
 
+Delete Job Config History
+[JobConfigHistory-Plugin-Best-Practices](https://support.cloudbees.com/hc/en-us/articles/115000305271-JobConfigHistory-Plugin-Best-Practices)
+
+```bash
+du -h -d 1 $JENKINS_HOME/config-history/jobs
+rm -rfv $JENKINS_HOME/config-history/jobs/**/* && \
+du -ah $JENKINS_HOME/config-history/jobs
+```
+
 Delete Espresso Job Log files
 
 ```bash
