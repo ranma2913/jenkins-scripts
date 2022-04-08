@@ -178,3 +178,9 @@ find -wholename "*sni-members-api-tempregression/*/log" \
   -printf '\n%p' \
   -delete
 ```
+
+Disk Size of build history in a folder
+
+```shell
+du -h -d 0 $JENKINS_HOME/jobs/OpenShift_UserSync/jobs/**/builds
+```

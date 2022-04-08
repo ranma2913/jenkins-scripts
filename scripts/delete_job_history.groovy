@@ -4,10 +4,10 @@ import jenkins.*
 import jenkins.model.*
 import org.jenkinsci.plugins.workflow.job.*
 
-def MAX_BUILDS = 4
+def MAX_BUILDS = 2
 //def itemNameMatcher = "/"
-//def itemNameMatcher = "OpenShift_UserSync/"
-def itemNameMatcher = "Fortify_Scan/"
+def itemNameMatcher = "OpenShift_UserSync/"
+//def itemNameMatcher = "Fortify_Scan/"
 def jobsToDelete = []
 
 println("************************************************** START ***************************************************************")
