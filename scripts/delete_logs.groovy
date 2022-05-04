@@ -4,11 +4,15 @@ import jenkins.model.Jenkins
 // Delete old logs that fills up the disk on the master node.
 // Run this from the Jenkins console (Manage Jenkins, Manage Nodes, master, Script Console)
 
-//def itemNameMatcher = "/"
-//def itemNameMatcher = "Build_And_Deploy/"
-//def itemNameMatcher = "Fortify_Scan/"
-def itemNameMatcher = "Sonar_Scan/"
-def numBuildsKeepLogs = 2
+def numBuildsKeepLogs = 5
+def itemNameMatcher=""
+try{
+    itemNameMatcher=args[0]
+}catch(e){
+    println ("usage: jcli groovy =< scripts/delete_logs.groovy <JenkinsItemName>")
+    return 1;
+}
+
 
 def totalSize = 0
 println("************************************************** START ***************************************************************")

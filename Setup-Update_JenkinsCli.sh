@@ -63,6 +63,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
     keytool -delete -alias ${CERT_ALIAS} -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS} || echo "${CERT_ALIAS} already deleted."
     # get the SSL certificate
     Root_CA_URL='https://r''epo1.u''hc.com/a''rtifactory/U''HG-certificates/o''ptum/O''ptum_Root_CA.cer'
+    mkdir -vp build/tmp
     curl $Root_CA_URL --output build/tmp/${CERT_ALIAS}.pem
     # import certificate
     keytool -import -noprompt -trustcacerts -alias ${CERT_ALIAS} -file build/tmp/${CERT_ALIAS}.pem -keystore "${KEYSTOREFILE}" -storepass ${KEYSTOREPASS}
@@ -83,7 +84,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
     fi
 
     # verify that the certificate is listed
-    KEYSTOREFILE="/Users/jsticha/WORK/RIPTiDE/IntelliJ_Workspace/jenkins-scripts/jenkins.jks"
+    KEYSTOREFILE="$JENKINS_SCRIPTS_HOME/jenkins.jks"
     keytool -list -v -keystore "${KEYSTOREFILE}" -storepass changeit
     echo ''
   fi
@@ -105,7 +106,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
     curl ${JENKINS_URL}/jnlpJars/jenkins-cli.jar --output jenkins-cli.jar
   fi
 
-  ALIAS_COMMAND="java -Djavax.net.ssl.trustStore=${KEYSTOREFILE} -Djavax.net.ssl.trustStorePassword=${KEYSTOREPASS} -jar $JENKINS_SCRIPTS_HOME/jenkins-cli.jar -s \$JENKINS_URL -webSocket"
+  ALIAS_COMMAND="java -Djavax.net.ssl.trustStore=${KEYSTOREFILE} -Djavax.net.ssl.trustStorePassword=${KEYSTOREPASS} -jar $JENKINS_SCRIPTS_HOME/jenkins-cli.jar -s \\\$JENKINS_URL -webSocket"
 
   RESET_JENKINS_CLI_FILE=false
   ALIAS_COMMAND_PRESENT=false

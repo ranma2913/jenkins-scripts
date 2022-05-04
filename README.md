@@ -3,36 +3,52 @@ Handy Groovy Console Scripts for Jenkins and CloudBees Jenkins Platform
 
 # CAUTION THE SCRIPTS CONSOLE IS VERY POWERFUL AND THUS DANGEROUS. It's recommended you backup your jenkins instance before running any scripts.
 
-## Requirements:
-Install the following tools with HomeBrew
-- gnu-sed
-- html-xml-utils
+## System Requirements:
+Mac Book Pro or any Linux based terminal
+
+## Software Requirements:
+Install the following tools with HomeBrew by first opening a
+terminal window:
+```
+brew install gnu-sed
+brew install html-xml-utils
+```
 
 ## Checking out the project from Git
 This project has a [submodule(s)](https://git-scm.com/book/en/v2/Git-Tools-Submodules). 
 When you clone such a project, by default you get the directories that contain submodules, 
-but none of the files within them yet:
+but none of the files within them yet. We will also fetch and checkout any nested submodules
+as well as go into your submodules and fetch any updates for you.
+Please run the commands below:
 ```
-git clone --recurse-submodules https://<githubhost>/riptide-devops/jenkins-scripts.git && \
+export githubhost=github.optum.com
+git clone --recurse-submodules https://$githubhost/riptide-devops/jenkins-scripts.git && \
 cd jenkins-scripts && \
 git config --local include.path .gitconfig
-```
-To also initialize, fetch and checkout any nested submodules, you can use the foolproof 
-```
 git submodule update --init --recursive
-```
-If you run `git submodule update --remote`, Git will go into your submodules and fetch and update for you.
+git submodule update --remote
 
+```
 # Jenkins CLI Installation MacOS
 Reference: https://www.jenkins.io/doc/book/managing/cli/#using-the-cli-client
-1. Checkout this repository in your machine. 
-2. Run the setup shell script:
+
+From the cloned directory in the terminal window, we are going to run
+the setup script:
 ```
-Setup-Update_JenkinsCli.sh
+chmod +x Setup-Update_JenkinsCli.sh
+./Setup-Update_JenkinsCli.sh
+
 ```
+When prompted, please provide the appropriate answers to the questions:
+ - When prompted for jenkins url, please provide a url in the form:
+ 
+        https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/
+        https://riptide-jenkins-cloud.optum.com/
+        https://riptide-jenkins-legacy.optum.com/
 
 ## Test your installation
-Run the following command in your terminal
+Open a new terminal window by pressing command-t. Then issue
+the command below
 
 ```
 jcli
@@ -41,6 +57,45 @@ jcli
 The output should look something like the following if everything is working correctly:
 
 ![Successful Installation](docs/images/2020-10-27_15-03-23.png)
+
+## Troubleshooting
+After running the jcli command, you may get the errors below:
+
+Problem:
+```
+| --> jcli
+-bash: jcli: command not found
+```
+Solution:
+You may need to source your bash_profile
+```
+source ~/.bash_profile
+```
+or open a new terminal by pressing control-t
+
+Problem:
+```
+--> jcli
+io.jenkins.cli.shaded.javax.websocket.DeploymentException: Handshake error.
+at io.jenkins.cli.shaded.org.glassfish.tyrus.client.ClientManager$3$1.run(ClientManager.java:674)
+at io.jenkins.cli.shaded.org.glassfish.tyrus.client.ClientManager$3.run(ClientManager.java:712)
+...
+...
+```
+
+Solution:
+The URL that is passed in the Setup-Update_JenkinsCli.sh script:
+```
+Please enter your jenkins url. (ex. https://jenkins-riptide-devops.com/):
+https://riptide-jenkins-cloud.optum.com/
+```
+and the token generated, are not from the same site:
+```
+https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/user/echow1/configure
+11760a9ecf6f8dab3f302bba200d7928cs
+```
+Re-run the Setup-Update_JenkinsCli.sh script.
+
 
 # Usage
 
@@ -55,18 +110,18 @@ jcli groovy =< riptide/Clear_Build_Queue.groovy
 Delete job history
 
 ```
-jcli groovy =< scripts/delete_job_history.groovy
+jcli groovy =< scripts/delete_job_history.groovy <JenkinsItemName>
 ```
 
 Delete artifacts from jobs
 
 ```
-jcli groovy =< scripts/delete_artifacts.groovy
+jcli groovy =< scripts/delete_artifacts.groovy <JenkinsItemName>
 ```
 
 Delete logs from jobs
 ```
-jcli groovy =< scripts/delete_logs.groovy
+jcli groovy =< scripts/delete_logs.groovy <JenkinsItemName>
 ```
 
 Kill Zombie Jobs
