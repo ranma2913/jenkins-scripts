@@ -130,22 +130,22 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
 && echo "'"ALIAS: '$JENKINS_ALIAS' JENKINS_URL=$JENKINS_URL JENKINS_USER_ID=$JENKINS_USER_ID"'"'" >>dotfiles/.jenkins-cli
   echo "$JENKINS_ALIAS" >>dotfiles/.jenkins-cli
 
-  echo "Update ~/.bash_profile with Jenkins CLI info"
-  BASH_PROFILE=~/.bash_profile
-  touch $BASH_PROFILE
+  echo "Update ~/.zshrc with Jenkins CLI info"
+  USER_RC_FILE=~/.zshrc
+  touch $USER_RC_FILE
 
   ADD_SOURCE=false
-  grep -qxF "# import '$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' if it exists" $BASH_PROFILE || ADD_SOURCE=true
+  grep -qxF "# import '$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' if it exists" $USER_RC_FILE || ADD_SOURCE=true
   if [ "$ADD_SOURCE" = true ]; then
-    echo '' >>$BASH_PROFILE
-    echo '#########################################' >>$BASH_PROFILE
-    echo '# Jenkins CLI' >>$BASH_PROFILE
-    echo "export JENKINS_SCRIPTS_HOME=$JENKINS_SCRIPTS_HOME" >>$BASH_PROFILE
-    echo 'export PATH="$JENKINS_SCRIPTS_HOME:$PATH"' >>$BASH_PROFILE
-    echo "# import '$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' if it exists" >>$BASH_PROFILE
-    echo 'if [ -f $JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli ]; then' >>$BASH_PROFILE
-    echo '  source $JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' >>$BASH_PROFILE
-    echo 'fi' >>$BASH_PROFILE
-    echo '' >>$BASH_PROFILE
+    echo '' >>$USER_RC_FILE
+    echo '#########################################' >>$USER_RC_FILE
+    echo '# Jenkins CLI' >>$USER_RC_FILE
+    echo "export JENKINS_SCRIPTS_HOME=$JENKINS_SCRIPTS_HOME" >>$USER_RC_FILE
+    echo 'export PATH="$JENKINS_SCRIPTS_HOME:$PATH"' >>$USER_RC_FILE
+    echo "# import '$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' if it exists" >>$USER_RC_FILE
+    echo 'if [ -f $JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli ]; then' >>$USER_RC_FILE
+    echo '  source $JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli' >>$USER_RC_FILE
+    echo 'fi' >>$USER_RC_FILE
+    echo '' >>$USER_RC_FILE
   fi
 fi
