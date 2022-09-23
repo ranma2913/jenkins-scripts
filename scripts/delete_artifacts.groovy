@@ -6,11 +6,14 @@ import org.jenkinsci.plugins.workflow.job.*
 
 // Delete old artifacts that fills up the disk on the master node.
 // Run this from the Jenkins console (Manage Jenkins, Manage Nodes, master, Script Console)
-
-//def itemNameMatcher = "/"
-//def itemNameMatcher = "Fortify_Scan/covid-portal/"
-def itemNameMatcher = "Sonar_Scan/"
 def numBuildsKeepArtifacts = 2
+def itemNameMatcher=""
+try{
+    itemNameMatcher=args[0]
+}catch(e){
+    println ("usage: jcli groovy =< scripts/delete_artifacts.groovy <JenkinsItemName>")
+    return 1;
+}
 
 def totalSize = 0
 println("************************************************** START ***************************************************************")

@@ -4,11 +4,16 @@ import jenkins.*
 import jenkins.model.*
 import org.jenkinsci.plugins.workflow.job.*
 
-def MAX_BUILDS = 2
-//def itemNameMatcher = "/"
-def itemNameMatcher = "OpenShift_UserSync/"
-//def itemNameMatcher = "Fortify_Scan/"
+def MAX_BUILDS = 5
 def jobsToDelete = []
+
+def itemNameMatcher=""
+try{
+ itemNameMatcher=args[0]
+}catch(e){
+ println ("usage: jcli groovy =< scripts/delete_job_history.groovy <JenkinsItemName>")
+ return 1;
+}
 
 println("************************************************** START ***************************************************************")
 Jenkins.instance.getAllItems(Job.class).each { job ->
