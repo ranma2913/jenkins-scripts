@@ -126,7 +126,7 @@ jcli groovy =< scripts/delete_logs.groovy <JenkinsItemName>
 
 Kill Zombie Jobs
 
-```
+```shell
 jcli groovy =< scripts/findAndKillZombieJobs.groovy
 jcli groovy =< riptide/Jenkins_Abort_Jobs.groovy
 jcli groovy =< riptide/Jenkins_Abort_All_Jobs.groovy
