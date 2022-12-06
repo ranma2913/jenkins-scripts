@@ -10,7 +10,6 @@ Mac Book Pro or any Linux based terminal
 Install the following tools with HomeBrew by first opening a
 terminal window:
 ```
-brew install gnu-sed
 brew install html-xml-utils
 ```
 
@@ -27,7 +26,6 @@ cd jenkins-scripts && \
 git config --local include.path .gitconfig
 git submodule update --init --recursive
 git submodule update --remote
-
 ```
 # Jenkins CLI Installation MacOS
 Reference: https://www.jenkins.io/doc/book/managing/cli/#using-the-cli-client
@@ -35,9 +33,7 @@ Reference: https://www.jenkins.io/doc/book/managing/cli/#using-the-cli-client
 From the cloned directory in the terminal window, we are going to run
 the setup script:
 ```
-chmod +x Setup-Update_JenkinsCli.sh
-./Setup-Update_JenkinsCli.sh
-
+bash ./Setup-Update_JenkinsCli.sh
 ```
 When prompted, please provide the appropriate answers to the questions:
  - When prompted for jenkins url, please provide a url in the form:
