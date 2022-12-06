@@ -9,6 +9,7 @@ function disableXtrace() {
   set +o xtrace
 }
 
+echo ''
 read -p "Verbose Output? (y/n): [n] " -n 1 -r IS_CONTINUE
 IS_CONTINUE=${IS_CONTINUE:-n}
 if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
@@ -18,22 +19,31 @@ else
   disableXtrace
 fi
 
+echo ''
 JENKINS_SCRIPTS_HOME=$(pwd)
 echo "This utility installs, updates, or configures the Jenkins CLI"
 printf "The current .jenkins-cli looks like:\n>>>>\n"
 cat "$JENKINS_SCRIPTS_HOME/dotfiles/.jenkins-cli"
 printf '\n<<<<\n'
 
+echo ''
 read -p "Are you sure you want to continue? (y/n): " -n 1 -r IS_CONTINUE
 KEYSTOREFILE="$JENKINS_SCRIPTS_HOME/jenkins.jks"
 KEYSTOREPASS=changeit
 
+echo ''
 read -p 'Please enter your jenkins url. (ex. https://jenkins-riptide-devops.com/): ' JENKINS_URL
 JENKINS_URL=${JENKINS_URL:-}
+
+echo ''
 read -p "Please enter the alias name for switching to $JENKINS_URL. (ex. riptideJenkinsDevops): " JENKINS_ALIAS
 JENKINS_ALIAS=${JENKINS_ALIAS:-riptideJenkinsDevops}
+
+echo ''
 read -p "Please enter your MSID: " SCRIPT_MSID
 SCRIPT_MSID=${SCRIPT_MSID}
+
+echo ''
 read -p "Please enter your Jenkins API Token (Generate one here $JENKINS_URL/user/$SCRIPT_MSID/configure): " SCRIPT_API_TOKEN
 SCRIPT_API_TOKEN=${SCRIPT_API_TOKEN}
 
@@ -42,6 +52,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   UPDATE_KEYSTORE=false
   RESET_KEYSTORE=false
   if test -f $KEYSTOREFILE; then
+    echo ''
     read -p "Do you want to update the jenkins.jks? (y/n): " -n 1 -r IS_CONTINUE
     if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
       UPDATE_KEYSTORE=true
@@ -70,6 +81,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
 
     if [[ $JENKINS_URL == https* ]]; then
       TRIMMED_URL=$(echo "$JENKINS_URL" | awk -F/ '{print $3}')
+      echo ''
       read -p "Do you want to update the jenkins.jks with a custom cert from your jenkins instance [$TRIMMED_URL]? (y/n): " -n 1 -r IS_CONTINUE
       if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
         echo "Getting Cert for $TRIMMED_URL"
@@ -91,6 +103,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
 
   DOWNLOAD_CLI_JAR=false
   if test -f 'jenkins-cli.jar'; then
+    echo ''
     read -p "Do you want to update the jenkins-cli.jar? (y/n): " -n 1 -r IS_CONTINUE
     if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
       DOWNLOAD_CLI_JAR=true
@@ -115,6 +128,7 @@ if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
   if [ "$ALIAS_COMMAND_PRESENT" = false ]; then
     RESET_JENKINS_CLI_FILE=true
   else
+    echo ''
     read -p "Do you want to reset the .jenkins-cli file and start afresh? (y/n): " -n 1 -r IS_CONTINUE
     if [[ $IS_CONTINUE =~ ^[Yy]$ ]]; then
       RESET_JENKINS_CLI_FILE=true
