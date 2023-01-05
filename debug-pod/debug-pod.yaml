@@ -27,9 +27,6 @@ spec:
         limits:
           memory: 1024Mi
           cpu: 250m
-      args:
-        - touch /tmp/keepalive.txt;
-          tail -f /tmp/keepalive.txt;
       readinessProbe:
         exec:
           command:
