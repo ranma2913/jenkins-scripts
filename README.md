@@ -65,7 +65,7 @@ Problem:
 Solution:
 You may need to source your bash_profile
 ```
-source ~/.bash_profile
+source ~/.zshrc
 ```
 or open a new terminal by pressing control-t
 
@@ -140,8 +140,6 @@ jcli groovy =< riptide/Kill_Running_Jobs.groovy
 kubectl delete -f debug-pod/debug-pod.yaml; \
   sleep 1; \
   kubectl apply -f debug-pod/debug-pod.yaml
-
-kubectl exec --stdin --tty debug-pod -- apk update && apk upgrade && apk add bash bash-doc bash-completion 
 
 kubectl exec --stdin --tty debug-pod -- /bin/bash
 ```
