@@ -134,6 +134,18 @@ jcli groovy =< riptide/Kill_Running_Jobs.groovy
 - Uninstall: [Job Configuration History Plugin](https://plugins.jenkins.io/jobConfigHistory) if you have any GitHub Org
   Jobs
 
+## Kubernetes Debug Pod
+
+```shell
+kubectl delete -f debug-pod/debug-pod.yaml; \
+  sleep 1; \
+  kubectl apply -f debug-pod/debug-pod.yaml
+
+kubectl exec --stdin --tty debug-pod -- apk update && apk upgrade && apk add bash bash-doc bash-completion 
+
+kubectl exec --stdin --tty debug-pod -- /bin/bash
+```
+
 ## Shell Script Commands: Cleanup File System
 
 ### Useful Shell Commands
