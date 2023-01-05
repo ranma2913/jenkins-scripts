@@ -11,7 +11,7 @@ spec:
   restartPolicy: Never
   containers:
     - image: docker.repo1.uhc.com/riptide/openshift-kubernetes-utilities/jenkins-busybox-alpine:latest
-      command: [ "sleep", "21600" ]
+      command: [ "sleep", "21600" ] # 6h = 21600s
       imagePullPolicy: IfNotPresent
       name: busybox
       securityContext:
