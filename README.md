@@ -141,7 +141,7 @@ kubectl delete -f debug-pod/debug-pod.yaml; \
   sleep 1; \
   kubectl apply -f debug-pod/debug-pod.yaml
 
-kubectl exec --stdin --tty debug-pod -- /bin/bash
+kubectl exec --kubeconfig=/Users/$(whoami)/.kube/acet-jenkins-hcc-naas-admin --stdin --tty debug-pod -- /bin/bash
 ```
 
 ## Shell Script Commands: Cleanup File System
@@ -152,6 +152,7 @@ Show file sizes in a directory
 
 ```bash
 ls -l --block-size=M /var/lib/jenkins
+ls -lhS /var/lib/jenkins
 ```
 
 Summary Disk Usage Recursive
@@ -160,6 +161,10 @@ Summary Disk Usage Recursive
 du -shc /var/lib/jenkins/*
 du -h --max-depth=1 /var/lib/jenkins
 du -h /var/lib/jenkins/ | sort -rh | head -5
+
+du -hc $JENKINS_HOME/* | sort
+du -hc -d 1 $JENKINS_HOME | sort -r
+du -hc $JENKINS_HOME | sort -r | head -5
 ```
 
 Shows disk space in human-readable format
@@ -196,7 +201,7 @@ Delete .gz log files
 ```bash
 find $JENKINS_HOME/logs \
   -name "*.gz" \
-  -printf '%p' \
+  -print \
   -delete
 ```
 
@@ -204,32 +209,32 @@ Delete rolled logs
 
 ```bash
 echo "Files to Delete:" && ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$"
-ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$" | xargs -d "\n" -I {} rm -v {}
+ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$" | xargs -I {} rm -v {}
 ```
 
 Delete HTML Audit Logs (One of the largest File System Hogs)
 
 ```bash
-du -ah $JENKINS_HOME/logs/audit/html
-ls $JENKINS_HOME/logs/audit/html | grep -P "^audit-\d{4}-\d{2}-\d{2}.html$" | xargs -d "\n" -I {} rm -v {}
-du -ah $JENKINS_HOME/logs/audit/html
+du -ah $JENKINS_HOME/logs/audit/html | sort
+ls -lhS $JENKINS_HOME/logs/audit/html | grep -P "^audit-\d{4}-\d{2}-\d{2}.html$" | xargs -d "\n" -I {} rm -v {}
+du -ah $JENKINS_HOME/logs/audit/html | sort
 ```
 
 Delete Pipeline Config History
 
 ```bash
-du -h -d 1 $JENKINS_HOME/pipeline-config-history
+du -h -d 1 $JENKINS_HOME/pipeline-config-history | sort
 rm -rfv $JENKINS_HOME/pipeline-config-history/**/* && \
-du -ah $JENKINS_HOME/pipeline-config-history
+du -ah $JENKINS_HOME/pipeline-config-history | sort
 ```
 
 Delete Job Config History
 [JobConfigHistory-Plugin-Best-Practices](https://support.cloudbees.com/hc/en-us/articles/115000305271-JobConfigHistory-Plugin-Best-Practices)
 
 ```bash
-du -h -d 1 $JENKINS_HOME/config-history/jobs
+du -h -d 1 $JENKINS_HOME/config-history | sort -r
 rm -rfv $JENKINS_HOME/config-history/jobs/**/* && \
-du -ah $JENKINS_HOME/config-history/jobs
+du -ah $JENKINS_HOME/config-history/jobs | sort
 ```
 
 Delete Espresso Job Log files
@@ -243,5 +248,10 @@ find -wholename "*sni-members-api-tempregression/*/log" \
 Disk Size of build history in a folder
 
 ```shell
-du -h -d 0 $JENKINS_HOME/jobs/OpenShift_UserSync/jobs/**/builds
+du -hc $JENKINS_HOME/logs | sort
+du -hc $JENKINS_HOME/nodes | sort
+du -hc -d 2 $JENKINS_HOME/jobs | sort
+du -h -d 1 $JENKINS_HOME/logs
 ```
+
+rm -rfv $JENKINS_HOME/logs/slaves/docker-*
