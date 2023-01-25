@@ -1,14 +1,13 @@
-import hudson.model.*
-import jenkins.*
-import jenkins.model.*
-import org.jenkinsci.plugins.workflow.job.*
+import hudson.model.Run
+import hudson.model.User
+import jenkins.model.Jenkins
 
 itemNameMatcherList = [
 //        /B360_Jobs/,
 //        /emr-poca/,
 //        /cdb-locked-accounts/,
 //        /sox-reporting_Jobs/,
-/digital-contact-history\//
+/RIPTiDE_Consolidated_Pipeline\//
 //        /WidgetFactory_Jobs/,
 ///pafs_ATDD_parallel7$/,
 ///OpenShift_UserSync/,

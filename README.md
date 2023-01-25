@@ -137,9 +137,23 @@ jcli groovy =< riptide/Kill_Running_Jobs.groovy
 ## Kubernetes Debug Pod
 
 ```shell
-kubectl delete -f debug-pod/debug-pod.yaml; \
+kubectl delete -f debug-pod/debug-pod-k8s.yaml; \
   sleep 1; \
-  kubectl apply -f debug-pod/debug-pod.yaml
+  kubectl apply -f debug-pod/debug-pod-k8s.yaml
+
+kubectl exec --stdin --tty debug-pod -- /bin/bash
+
+kubectl exec --kubeconfig=/Users/$(whoami)/.kube/acet-jenkins-hcc-naas-admin --stdin --tty debug-pod -- /bin/bash
+```
+
+## OpenShift Debug Pod
+
+```shell
+kubectl delete -f debug-pod/debug-pod-openshift.yaml; \
+  sleep 1; \
+  kubectl apply -f debug-pod/debug-pod-openshift.yaml
+
+kubectl exec --stdin --tty debug-pod -- /bin/bash
 
 kubectl exec --kubeconfig=/Users/$(whoami)/.kube/acet-jenkins-hcc-naas-admin --stdin --tty debug-pod -- /bin/bash
 ```
@@ -176,7 +190,7 @@ df -h
 Check Logs Directory Usage
 
 ```bash
-du -ah $JENKINS_HOME/logs
+du -ahc $JENKINS_HOME/logs
 ```
 
 ### Cleanup Shell Commands
@@ -193,7 +207,7 @@ mkdir -p $JENKINS_HOME/jobs/empty_dir
 2. Rsync with --delete flag to delete files quickly:
 
 ```shell
-rsync --one-file-system -avzP --itemize-changes --delete "$JENKINS_HOME/jobs/empty_dir/" "$JENKINS_HOME/jobs/Fortify_Scan/"
+rsync --one-file-system -avzP --itemize-changes --delete "$JENKINS_HOME/jobs/empty_dir/" "$JENKINS_HOME/jobs/Sonar_Scan/jobs/"
 ```
 
 Delete .gz log files
@@ -215,7 +229,7 @@ ls $JENKINS_HOME/logs/**/* | grep -P "^.+\.log\.\d+$" | xargs -I {} rm -v {}
 Delete HTML Audit Logs (One of the largest File System Hogs)
 
 ```bash
-du -ah $JENKINS_HOME/logs/audit/html | sort
+du -ahc $JENKINS_HOME/logs/audit/html | sort
 ls -lhS $JENKINS_HOME/logs/audit/html | grep -P "^audit-\d{4}-\d{2}-\d{2}.html$" | xargs -d "\n" -I {} rm -v {}
 du -ah $JENKINS_HOME/logs/audit/html | sort
 ```
@@ -232,7 +246,7 @@ Delete Job Config History
 [JobConfigHistory-Plugin-Best-Practices](https://support.cloudbees.com/hc/en-us/articles/115000305271-JobConfigHistory-Plugin-Best-Practices)
 
 ```bash
-du -h -d 1 $JENKINS_HOME/config-history | sort -r
+du -h -d 1 $JENKINS_HOME/config-history | sort
 rm -rfv $JENKINS_HOME/config-history/jobs/**/* && \
 du -ah $JENKINS_HOME/config-history/jobs | sort
 ```
@@ -251,7 +265,8 @@ Disk Size of build history in a folder
 du -hc $JENKINS_HOME/logs | sort
 du -hc $JENKINS_HOME/nodes | sort
 du -hc -d 2 $JENKINS_HOME/jobs | sort
+du -h -d 2 $JENKINS_HOME/jobs/Sonar_Scan | sort
 du -h -d 1 $JENKINS_HOME/logs
 ```
 
-rm -rfv $JENKINS_HOME/logs/slaves/docker-*
+rm -rfv $JENKINS_HOME/jobs/Sonar_Scan/jobs/**/branches/**/*
