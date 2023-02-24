@@ -154,8 +154,6 @@ kubectl delete -f debug-pod/debug-pod-openshift.yaml; \
   kubectl apply -f debug-pod/debug-pod-openshift.yaml
 
 kubectl exec --stdin --tty debug-pod -- /bin/bash
-
-kubectl exec --kubeconfig=/Users/$(whoami)/.kube/acet-jenkins-hcc-naas-admin --stdin --tty debug-pod -- /bin/bash
 ```
 
 ## Shell Script Commands: Cleanup File System
@@ -165,16 +163,16 @@ kubectl exec --kubeconfig=/Users/$(whoami)/.kube/acet-jenkins-hcc-naas-admin --s
 Show file sizes in a directory
 
 ```bash
-ls -l --block-size=M /var/lib/jenkins
-ls -lhS /var/lib/jenkins
+ls -l --block-size=M $JENKINS_HOME
+ls -lhS $JENKINS_HOME
 ```
 
 Summary Disk Usage Recursive
 
 ```bash
-du -shc /var/lib/jenkins/*
-du -h --max-depth=1 /var/lib/jenkins
-du -h /var/lib/jenkins/ | sort -rh | head -5
+du -shc $JENKINS_HOME/*
+du -h -d 1 $JENKINS_HOME
+du -h $JENKINS_HOME/ | sort -rh | head -5
 
 du -hc $JENKINS_HOME/* | sort
 du -hc -d 1 $JENKINS_HOME | sort -r
@@ -246,9 +244,9 @@ Delete Job Config History
 [JobConfigHistory-Plugin-Best-Practices](https://support.cloudbees.com/hc/en-us/articles/115000305271-JobConfigHistory-Plugin-Best-Practices)
 
 ```bash
-du -h -d 1 $JENKINS_HOME/config-history | sort
+du -hc -d 2 $JENKINS_HOME/config-history | sort
 rm -rfv $JENKINS_HOME/config-history/jobs/**/* && \
-du -ah $JENKINS_HOME/config-history/jobs | sort
+du -ahc $JENKINS_HOME/config-history/jobs | sort
 ```
 
 Delete Espresso Job Log files
@@ -269,4 +267,5 @@ du -h -d 2 $JENKINS_HOME/jobs/Sonar_Scan | sort
 du -h -d 1 $JENKINS_HOME/logs
 ```
 
+rm -fv gc-2020*.log.*
 rm -rfv $JENKINS_HOME/jobs/Sonar_Scan/jobs/**/branches/**/*
