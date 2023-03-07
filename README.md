@@ -1,24 +1,30 @@
 # jenkins-scripts
+
 Handy Groovy Console Scripts for Jenkins and CloudBees Jenkins Platform
 
 # CAUTION THE SCRIPTS CONSOLE IS VERY POWERFUL AND THUS DANGEROUS. It's recommended you backup your jenkins instance before running any scripts.
 
 ## System Requirements:
+
 Mac Book Pro or any Linux based terminal
 
 ## Software Requirements:
+
 Install the following tools with HomeBrew by first opening a
 terminal window:
+
 ```
 brew install html-xml-utils
 ```
 
 ## Checking out the project from Git
-This project has a [submodule(s)](https://git-scm.com/book/en/v2/Git-Tools-Submodules). 
-When you clone such a project, by default you get the directories that contain submodules, 
+
+This project has a [submodule(s)](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+When you clone such a project, by default you get the directories that contain submodules,
 but none of the files within them yet. We will also fetch and checkout any nested submodules
 as well as go into your submodules and fetch any updates for you.
 Please run the commands below:
+
 ```
 export githubhost=github.optum.com
 git clone --recurse-submodules https://$githubhost/riptide-devops/jenkins-scripts.git && \
@@ -27,22 +33,28 @@ git config --local include.path .gitconfig
 git submodule update --init --recursive
 git submodule update --remote
 ```
+
 # Jenkins CLI Installation MacOS
+
 Reference: https://www.jenkins.io/doc/book/managing/cli/#using-the-cli-client
 
 From the cloned directory in the terminal window, we are going to run
 the setup script:
+
 ```
 bash ./Setup-Update_JenkinsCli.sh
 ```
+
 When prompted, please provide the appropriate answers to the questions:
- - When prompted for jenkins url, please provide a url in the form:
- 
-        https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/
-        https://riptide-jenkins-cloud.optum.com/
-        https://riptide-jenkins-legacy.optum.com/
+
+- When prompted for jenkins url, please provide a url in the form:
+
+       https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/
+       https://riptide-jenkins-cloud.optum.com/
+       https://riptide-jenkins-legacy.optum.com/
 
 ## Test your installation
+
 Open a new terminal window by pressing command-t. Then issue
 the command below
 
@@ -55,21 +67,27 @@ The output should look something like the following if everything is working cor
 ![Successful Installation](docs/images/2020-10-27_15-03-23.png)
 
 ## Troubleshooting
+
 After running the jcli command, you may get the errors below:
 
 Problem:
+
 ```
 | --> jcli
 -bash: jcli: command not found
 ```
+
 Solution:
 You may need to source your bash_profile
+
 ```
 source ~/.zshrc
 ```
+
 or open a new terminal by pressing control-t
 
 Problem:
+
 ```
 --> jcli
 io.jenkins.cli.shaded.javax.websocket.DeploymentException: Handshake error.
@@ -81,17 +99,20 @@ at io.jenkins.cli.shaded.org.glassfish.tyrus.client.ClientManager$3.run(ClientMa
 
 Solution:
 The URL that is passed in the Setup-Update_JenkinsCli.sh script:
+
 ```
 Please enter your jenkins url. (ex. https://jenkins-riptide-devops.com/):
 https://riptide-jenkins-cloud.optum.com/
 ```
+
 and the token generated, are not from the same site:
+
 ```
 https://jenkins-riptide-devops.ocp-ctc-core-nonprod.optum.com/user/echow1/configure
 11760a9ecf6f8dab3f302bba200d7928cs
 ```
-Re-run the Setup-Update_JenkinsCli.sh script.
 
+Re-run the Setup-Update_JenkinsCli.sh script.
 
 # Usage
 
@@ -116,6 +137,7 @@ jcli groovy =< scripts/delete_artifacts.groovy <JenkinsItemName>
 ```
 
 Delete logs from jobs
+
 ```
 jcli groovy =< scripts/delete_logs.groovy <JenkinsItemName>
 ```
@@ -205,7 +227,7 @@ mkdir -p $JENKINS_HOME/jobs/empty_dir
 2. Rsync with --delete flag to delete files quickly:
 
 ```shell
-rsync --one-file-system -avzP --itemize-changes --delete "$JENKINS_HOME/jobs/empty_dir/" "$JENKINS_HOME/jobs/Sonar_Scan/jobs/"
+rsync --one-file-system -avzP --itemize-changes --delete "$JENKINS_HOME/jobs/empty_dir/" "$JENKINS_HOME/logs/audit/"
 ```
 
 Delete .gz log files
@@ -245,8 +267,18 @@ Delete Job Config History
 
 ```bash
 du -hc -d 2 $JENKINS_HOME/config-history | sort
+
+du -hc -d 1 $JENKINS_HOME/config-history/jobs
 rm -rfv $JENKINS_HOME/config-history/jobs/**/* && \
-du -ahc $JENKINS_HOME/config-history/jobs | sort
+du -hc -d 1 $JENKINS_HOME/config-history/jobs
+```
+
+Delete Nodes Config History
+
+```shell
+du -hc -d 1 $JENKINS_HOME/config-history/nodes
+rm -rfv $JENKINS_HOME/config-history/nodes
+du -ahc $JENKINS_HOME/config-history/nodes | sort
 ```
 
 Delete Espresso Job Log files
