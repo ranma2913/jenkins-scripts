@@ -7,7 +7,7 @@ itemNameMatcherList = [
 //        /emr-poca/,
 //        /cdb-locked-accounts/,
 //        /sox-reporting_Jobs/,
-/RIPTiDE_Consolidated_Pipeline\//
+/RIPTiDE_Consolidated_Pipeline\/rts-enrichment/
 //        /WidgetFactory_Jobs/,
 ///pafs_ATDD_parallel7$/,
 ///OpenShift_UserSync/,
