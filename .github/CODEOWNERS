@@ -1,0 +1,10 @@
+# https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners
+# Each line is a file pattern followed by one or more owners.
+
+# Write Team includes all the engineers. 
+# https://github.com/orgs/uhc-tech-employer-individual/teams/riptide_github_write
+* @uhc-tech-employer-individual/riptide_github_write
+
+# Admin Team includes the Tech Architects and A4Me-GitHub Admins 
+# https://github.com/orgs/uhc-tech-employer-individual/teams/riptide_github_admin
+.github/ @uhc-tech-employer-individual/riptide_github_admin
