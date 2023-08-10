@@ -1,16 +1,7 @@
-# For questions, and you want a human, reach out Chris.Rothwell@Optum.com with the EIS team. More information is
-# available here: https://appsec.optum.com/docs/pullreq/
-#
-# Added via Firehose 1.1
-
+# @see https://appsec.optum.com/docs/sast/codeql/
+## For technical support, see https://appsec.optum.com/docs/support/
 name: "CodeQL"
 on:
-  ## By default, this is configured to the default branch.  There are many options as to what tag or
-  ## action triggers the scan, which may be needed if you are doing a new default branch every sprint
-  ## or some other workflow.
-  ## https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
-  ## https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
-  ## https://michaelcurrin.github.io/dev-cheatsheets/cheatsheets/ci-cd/github-actions/triggers.html
   push:
     branches:
       - develop
@@ -26,10 +17,8 @@ on:
       - releases/**
 jobs:
   analyze:
-    name: Analyze ${{github.repository}} (${{matrix.language}})
-    ## For C#/.NET projects, comment out the Linux 'runs on' and use Windows.  In most cases, the Linux boxes will be faster.
+    name: Analyze (${{matrix.language}}) Code
     runs-on: [ uhg-ghas, Linux, core-access ]
-    #runs-on: [ uhg-ghas, Windows ]
     permissions:
       actions: read
       contents: read
