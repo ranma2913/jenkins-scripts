@@ -27,11 +27,11 @@ println("****************************************** Processing Started *********
 Jenkins.instance.getAllItems(hudson.model.Job).each { job ->
   println("Class: ${job.getClass()} fullName: ${job.fullName}")
   Map<Integer, Run> jobBuilds = job.getBuildsAsMap()
-  printHelper(verboseOutput, "Class: ${jobBuilds.getClass()}\n jobBuilds.size() = ${jobBuilds.size()}")
+  printHelper(vo, "Class: ${jobBuilds.getClass()}\n jobBuilds.size() = ${jobBuilds.size()}")
   jobBuilds.each() { int id, Run run ->
 
 
-    printHelper(verboseOutput, "\t- runId: ${id}" +
+    printHelper(vo, "\t- runId: ${id}" +
         "\n\t  BuildStatusSumamry.message: ${run.getBuildStatusSummary().message}" +
         "\n\t  run.getClass(): ${run.getClass()}" +
         "\n\t  run.hasntStartedYet(): ${run.hasntStartedYet()}" +
@@ -54,7 +54,7 @@ Jenkins.instance.getAllItems(hudson.model.Job).each { job ->
       } else {
         def executor = run.getExecutor()
         if (executor && executor.isActive()) {
-          printHelper(verboseOutput, "executor = $executor. Interruptuing with hudson.model.Result.ABORTED")
+          printHelper(vo, "executor = $executor. Interruptuing with hudson.model.Result.ABORTED")
           executor.interrupt(hudson.model.Result.ABORTED)
         }
       }
